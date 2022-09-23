@@ -20,7 +20,7 @@ def test_start_equity_5000_ruin_equity_4000_1_year_test():
 
     mc_sims_results = mc_analysis(results=results, start_equity=5000, ruin_equity=4000, sim_years_duration=1, nb_iterations=10000)
 
-    assert 0.13 < mc_sims_results['risk_of_ruin_percent'] < 0.18
+    assert 0.12 < mc_sims_results['risk_of_ruin_percent'] < 0.18
     assert 0.33 < round(mc_sims_results['med_max_drawdown_percent'], 2) < 0.37
     assert 1.80 < mc_sims_results['med_profit_percent'] < 2.00
     assert mc_sims_results['prob_profit_is_positive'] > 0.996
