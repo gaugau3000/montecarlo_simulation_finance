@@ -1,6 +1,8 @@
 import mc_sim_fin.utils.helpers as helpers
 from typing import Dict, Tuple
 from pandas import DataFrame
+import psutil
+import ray
 
 
 def mc_analysis(results: DataFrame, start_equity: float,
@@ -15,12 +17,18 @@ def mc_analysis(results: DataFrame, start_equity: float,
                    'profit_results': profit_results,
                    'start_equity': start_equity,
                    'ruin_equity': ruin_equity}
+    num_cpus = psutil.cpu_count(logical=False)
+    ray.init(num_cpus=num_cpus)
+    sim_iters_raw_results = ray.get([run_simulation.remote(iter_params, int(nb_iterations/num_cpus))]*num_cpus)
+    sim_raw_results = {'is_ruin': [], 'drawdown': [], 'profit': [], 'is_profit_positive': []}
+    for sim_iter_raw_results in sim_iters_raw_results:
+        for key in sim_iter_raw_results:
+            sim_raw_results[key] = sim_iter_raw_results[key] + sim_raw_results[key]
 
-    sim = run_simulation(iter_params, nb_iterations)
-
-    return get_simulation_results(sim, start_equity)
+    return get_simulation_results(sim_raw_results, start_equity)
 
 
+@ray.remote
 def run_simulation(iter_params: Tuple, nb_iterations: int) -> Tuple:
     sim_drawdown, sim_profit, sim_is_positive_profit, sim_is_ruin = [], [], [], []
 
