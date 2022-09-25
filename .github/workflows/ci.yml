@@ -20,19 +20,20 @@ jobs:
         run: pytest --cov=./ --flake8
   
   codecov:
-    publish:
-      steps:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
         # - name: gen codecov report
         #   run: pytest --cov=./ --flake8
         - name: publish on codecov
-          needs: test
           uses: codecov/codecov-action@v3
           
   deploy:
-      steps:
-        - name: deploy to pypi
-          needs: test
-          if:  startsWith(github.ref, 'refs/tags/v')
-          uses: pypa/gh-action-pypi-publish@release/v1
-          with:
-            password: ${{ secrets.PYPI_PASSWORD }}
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: deploy to pypi
+        if:  startsWith(github.ref, 'refs/tags/v')
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_PASSWORD }}
