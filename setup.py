@@ -10,7 +10,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='mc-sim-fin',
-    version='0.1.1b3',
+    version='1.0.0',
     description='montecarlo simulations/analysis library for finance',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -26,6 +26,6 @@ setup(
     ],
     keywords='finance montecarlo simulations backtest risk management',
     packages=find_packages(),
-    python_requires='>=3.7, <4',
-    install_requires=['numpy', 'pandas'],
+    python_requires='>=3.9, <4',
+    install_requires=['pandas'],
 )

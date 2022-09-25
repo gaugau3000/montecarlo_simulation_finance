@@ -17,6 +17,7 @@ def mc_analysis(results: DataFrame, start_equity: float,
                    'profit_results': profit_results,
                    'start_equity': start_equity,
                    'ruin_equity': ruin_equity}
+
     num_cpus = multiprocessing.cpu_count()
     pool = Pool(num_cpus)
     sim_iters_raw_results = pool.starmap(run_simulation, [(iter_params, int(nb_iterations/num_cpus))]*num_cpus)
