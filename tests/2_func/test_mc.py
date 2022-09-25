@@ -3,6 +3,7 @@ import mc_sim_fin.utils.helpers as helpers
 import pandas as pd
 import numpy as np
 from datetime import datetime
+import dateutil
 
 
 def test_2_trades_per_year_with_1_year_simulation_should_use_2_samples_for_simulation():
@@ -13,7 +14,9 @@ def test_2_trades_per_year_with_1_year_simulation_should_use_2_samples_for_simul
 
 
 def test_start_equity_5000_ruin_equity_4000_1_year_test():
-    date_results = pd.date_range(start='1/1/2017', end='31/12/2017').tolist()
+    start_date = dateutil.parser.parse('1/1/2017', dayfirst=True)
+    end_date = dateutil.parser.parse('31/12/2017', dayfirst=True)
+    date_results = pd.date_range(start=start_date, end=end_date).tolist()
     profit_results = np.resize([200, -150], 365)
 
     results = pd.DataFrame({'date_results': date_results, 'profit_results': profit_results})
