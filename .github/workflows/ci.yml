@@ -29,6 +29,12 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@master
+      - name: Set up Pytho
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: create package
+        run: python setup.py sdist
       - name: deploy to pypi
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
