@@ -19,5 +19,4 @@ The target is algorithmic traders that want to make further analysis on their ba
 ## Requirements
 
 - Python >= 3.7
-- numpy
 - pandas

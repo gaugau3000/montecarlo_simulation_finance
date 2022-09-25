@@ -4,6 +4,18 @@ from typing import Tuple, Dict
 import pandas as pd
 
 
+def concat_sim_iters_raw_results(sim_iters_raw_results: list):
+    sim_raw_results = {}
+
+    for sim_iters_raw_results_key in sim_iters_raw_results[0].keys():
+        sim_raw_results[sim_iters_raw_results_key] = []
+
+    for sim_iter_raw_results in sim_iters_raw_results:
+        for key in sim_iter_raw_results:
+            sim_raw_results[key] = sim_iter_raw_results[key] + sim_raw_results[key]
+    return sim_raw_results
+
+
 def get_duration_in_years(date_results: Series) -> float:
     return (date_results.max() - date_results.min()).days/365
 

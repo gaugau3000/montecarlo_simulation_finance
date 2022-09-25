@@ -1,6 +1,8 @@
 import mc_sim_fin.utils.helpers as helpers
 from typing import Dict, Tuple
 from pandas import DataFrame
+import multiprocessing
+from multiprocessing import Pool
 
 
 def mc_analysis(results: DataFrame, start_equity: float,
@@ -16,9 +18,12 @@ def mc_analysis(results: DataFrame, start_equity: float,
                    'start_equity': start_equity,
                    'ruin_equity': ruin_equity}
 
-    sim = run_simulation(iter_params, nb_iterations)
+    num_cpus = multiprocessing.cpu_count()
+    pool = Pool(num_cpus)
+    sim_iters_raw_results = pool.starmap(run_simulation, [(iter_params, int(nb_iterations/num_cpus))]*num_cpus)
+    sim_raw_results = helpers.concat_sim_iters_raw_results(sim_iters_raw_results)
 
-    return get_simulation_results(sim, start_equity)
+    return get_simulation_results(sim_raw_results, start_equity)
 
 
 def run_simulation(iter_params: Tuple, nb_iterations: int) -> Tuple:
